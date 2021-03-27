@@ -1,0 +1,24 @@
+.post-container {
+    margin: 50px auto;
+    width: 50%;
+    border: solidhsla(310, 35%, 80%, 0.918);
+    border-radius: 10px;
+    text-align: center;
+    background-color:#ffddf4ea;
+  }
+  .title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 50px;
+  }
+  input[type="text"] {
+    width: 95%;
+    height: 40px;
+  }
+  input[type="submit"] {
+    width: 200px;
+    font-size: 20px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    background-color:#a9c0ffea
+  }

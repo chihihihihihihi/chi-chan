@@ -1,0 +1,32 @@
+<h1>新しくMVを追加</h1>
+
+<%= stylesheet_link_tag 'new', :media => "all" %>
+
+<div class="post-container">
+    <p class="title">新しいMVを追加</p>
+    <%= form_for(@tweet, :url => { controller:'tweets', action:'create'})do |f| %>
+    <div class="field">
+   
+     <%= f.label :アーティスト名 %>
+     <%= f.text_field :title, :size => 140 %>
+    </div>
+
+    <div class="check_box">
+    </div>
+
+    <%= f.label :曲名 %>
+        <br>
+        <%= f.text_field :body,size: 140%>
+        <br>
+
+    <%= f.label :リンク %>
+    <br>
+    <%= f.text_field :youtube_url,size: 140%>
+    <br>
+        
+    <%= f.submit "追加"%>
+    <br>
+    
+    <% end %>
+</div>
+

@@ -1,0 +1,121 @@
+<%= stylesheet_link_tag 'index', :media => "all" %>
+
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
+      <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
+      <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/assets/coffee.png" class="d-block w-100" alt="...">
+        <div class="container">
+          <div class="carousel-caption text-start">
+            <h1>①KPOPのMVを投稿しよう</h1>
+            <p>①KPOPのMVを投稿しよう</p>
+            <p><a class="btn btn-lg btn-primary" href="#" role="button">新規MV投稿ページへ</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="/assets/coffee.png" class="d-block w-100" alt="...">
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>○分△秒の何がかっこいいのか投稿しよう</h1>
+            <p>○分△秒の何がかっこいいのか投稿しよう</p>
+            <p><a class="btn btn-lg btn-primary" href="#" role="button">詳細ページへ</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="/assets/coffee.png" class="d-block w-100" alt="...">
+
+        <div class="container">
+          <div class="carousel-caption text-end">
+            <h1>みんなと感想をピンポイントで共有しよう</h1>
+            <p>みんなと感想をピンポイントで共有しよう</p>
+            <p><a class="btn btn-lg btn-primary" href="#" role="button">今すぐ新規登録！</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#myCarousel" role="button" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">前へ</span>
+    </a>
+    <a class="carousel-control-next" href="#myCarousel" role="button" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">次へ</span>
+    </a>
+  </div>
+
+<h3>アーティスト名を検索</h3>
+ <%= form_tag({controller:"tweets",action:"index"}, method: :get) do %>
+   <%= text_field_tag :search %>
+   <%= submit_tag '検索する'  %>
+<% end %>
+
+<h3>曲名を検索</h3>
+ <%= form_tag({controller:"tweets",action:"index"}, method: :get) do %>
+   <%= text_field_tag :search %>
+   <%= submit_tag '検索する'  %>
+<% end %>
+
+<%= link_to "新しくMVを追加", new_tweet_path %>
+
+
+<br>
+<%# page_entries_info @tweets %>
+
+<div class="tweets-container">
+<h3>コメント一覧</h3>
+  <% @tweets.each do |t| %>
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/<%=t.youtube_url%>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <a href="/users/<%= t.user.id %>"><%= t.user.name %></a>　#
+    <div class="tweet">
+    
+    <% if user_signed_in? %>
+    <%= link_to "マイページへ", user_path(current_user.id) %>　
+    <% end %>
+
+    <%= image_tag t.image_url, size: "250x200" if t.image? %>
+   　　 <%= t.user.email %>
+   <% if user_signed_in? %>
+   <% if current_user.already_liked?(t) %>
+       <%= link_to tweet_like_path(id: t.id, tweet_id: t.id), method: :delete do %>
+           <p>いいねを取り消す</p><%= t.likes.count %>
+       <% end %>
+   <% else %>
+       <%= link_to tweet_likes_path(id: t.id, tweet_id: t.id), method: :post do %>
+           <p>いいね</p><%= t.likes.count %>
+       <% end %>
+   <% end %>
+ <% else %>
+   <p>いいねの数 = </p><%= t.likes.count %>
+ <% end %>
+    　　<div class="main-box">
+        <div class="left-container"><%= t.title %></div>
+        <div class="left-container"><%= t.body %></div>
+        <div class="right-container">
+          <%= link_to "詳細", tweet_path(t.id) %>
+         <% if user_signed_in? && current_user.id == t.user_id %>
+          <%= link_to "編集", edit_tweet_path(t.id) %>
+          <%= link_to "削除", tweet_path(t.id), method: :delete %>
+        <% end %> 
+       </div>
+      </div>
+
+      <%= t.created_at %>
+        <p class="time"><%= t.created_at %></p>
+    </div>
+  <% end %>
+</div>
+
+<%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>
+
+
+<%# paginate @tweets %>
+
