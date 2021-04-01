@@ -1,44 +1,53 @@
-<h1>MVTwitter</h1>
-<h3>MV名前</h3>
+<h2>詳細ページ<h2>
+<h3>①MV詳細</h3>
 <div class="tweet">
   <p><%= @tweet.body %></p>
-  <p><%= @tweet.created_at %></p>
+  <%= link_to "↑曲名を編集する", edit_tweet_path(@tweet.id) %>
 
   <% if user_signed_in? %>
-      <% if current_user.already_liked?(@tweet) %>
-          <%= link_to tweet_like_path(@tweet), method: :delete do %>
-             <p>いいねを取り消す</p><%= @tweet.likes.count %>
-          <% end %>
-      <% else %>
-          <%= link_to tweet_likes_path(@tweet), method: :post do %>
-             <p>いいね</p><%= @tweet.likes.count %>
-          <% end %>
+  <% if current_user.already_liked?(@tweet) %>
+      <%= link_to tweet_like_path(@tweet), method: :delete do %>
+         <p>↓いいねを取り消す</p><%= @tweet.likes.count %>
       <% end %>
   <% else %>
-      <p>いいねの数 = </p><%= @tweet.likes.count %>
+      <%= link_to tweet_likes_path(@tweet), method: :post do %>
+         <p>↓MVにいいね</p><%= @tweet.likes.count %>
+      <% end %>
   <% end %>
+<% else %>
+  <p>いいねの数 = </p><%= @tweet.likes.count %>
+<% end %>
+
+
+  <p><%= @tweet.created_at %></p>
+  <p>
+  <strong>Youtube url:</strong>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= @tweet.youtube_url%>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+　</p>
 
 </div>
 
+<h1> <h1>
+<h3>②感想をツイート</h3>
+
 <div class="comment-wrapper">
-  <p>コメント一覧</p>
-  <% @comments.each do |c| %>
-    <div>
-      <%= c.user.email unless c.user.blank? %>
-      <br>
-      <%= c.content %>
-      <%= c.hun %>
-      <%= c.byo %>
-    </div>
-      <br>
-  <% end %>
 
   <% if user_signed_in? %>
     <%= form_with(model: [@tweet, @comment], local: true) do |f| %>
-      <%= f.text_area :content %>
-      <%= f.text_area :hun %>
-      <%= f.text_area :byo %>
-
+      <table>
+      　　　　　<tr>
+        　　　　　<td>分(数字)</td>
+        　　　　　<td>秒(数字)</td>
+        　　　　　<td>感想</td>
+      　　　　　</tr>
+      　　　　　<tr>
+       　　　　　 <td><%= f.text_area :hun %></td>
+        　　　　　<td><%= f.text_area :byo %></td>
+        　　　　　<td><%= f.text_area :content %></td>
+      　　　　　</tr>
+      　　　　</table>
+      
+      　<h5>感想を種類分け（タグ付け）しよう<h5>          
         <%= f.collection_check_boxes(:tag_ids, Tag.all, :id, :name) do |tag| %>
           <div>
             <%= tag.label do %>
@@ -48,15 +57,14 @@
           </div>
         <% end %>
         <%= button_tag type: "submit" do %>
-          <i class="far fa-comments"></i> コメントする
+          <i class="far fa-comments"></i> 決定
         <% end %>
+
     <% end %>
 <% end %>
-</div>
 
-<%= link_to "編集する", edit_tweet_path(@tweet.id) %>
-
-<%= link_to "Tweet一覧に戻る", tweets_path %>
+<h1> <h1>
+<h3>③コメントをみる</h3>
 
 <% @comment.tags.each do |tag| %>
   <%= tag.name %>
@@ -72,7 +80,34 @@
   %>
 <% end %>
 
-<p>
-  <strong>Youtube url:</strong>
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= @tweet.youtube_url%>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</p>
+<p>コメント一覧</p>
+  <% @comments_tag.each do |c| %>
+    <div>
+      <br>
+      <table>
+      　　　　　<tr>
+                 <td>ユーザー名</td>
+        　　　　　<td>分</td>
+        　　　　　<td>秒</td>
+        　　　　　<td>感想</td>
+      　　　　　</tr>
+      
+      　　　　　<tr>
+      　　　　　　<td><%= c.user.name unless c.user.blank? %></td>
+        　　　　　<td><%= c.hun %></td>
+        　　　　　<td><%= c.byo %></td>
+        　　　　　<td><%= c.content %></td>
+      　　　　　</tr>
+      　　　　</table>      
+      
+    </div>
+      <br>
+  <% end %>
+
+</div>
+
+
+<%= link_to "MV検索に戻る", tweets_path %>
+
+
+<%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>

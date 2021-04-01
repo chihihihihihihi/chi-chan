@@ -37,7 +37,7 @@ before_action :authenticate_user!
         @tweet = Tweet.find(params[:id])
         @comments = @tweet.comments.order("sum")
         @comment = Comment.new
-        @commment_tag = params[:tag_id].present? ? Tag.find(params[:tag_id]).comments : Comment.all
+        @comments_tag = params[:tag_id].present? ? Tag.find(params[:tag_id]).comments : @tweet.comments
       end
 
       def edit

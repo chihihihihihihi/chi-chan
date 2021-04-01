@@ -11,9 +11,8 @@
         <img src="/assets/coffee.png" class="d-block w-100" alt="...">
         <div class="container">
           <div class="carousel-caption text-start">
-            <h1>①KPOPのMVを投稿しよう</h1>
-            <p>①KPOPのMVを投稿しよう</p>
-            <p><a class="btn btn-lg btn-primary" href="#" role="button">新規MV投稿ページへ</a></p>
+            <h1>①MVを検索！</h1>
+            <p>感想をつぶやきたいKPOPのMVを検索しよう</p>
           </div>
         </div>
       </div>
@@ -22,9 +21,8 @@
 
         <div class="container">
           <div class="carousel-caption">
-            <h1>○分△秒の何がかっこいいのか投稿しよう</h1>
-            <p>○分△秒の何がかっこいいのか投稿しよう</p>
-            <p><a class="btn btn-lg btn-primary" href="#" role="button">詳細ページへ</a></p>
+            <h1>②感想をツイート！</h1>
+            <p>○分△秒の何が好きかつぶやこう</p>
           </div>
         </div>
       </div>
@@ -33,9 +31,10 @@
 
         <div class="container">
           <div class="carousel-caption text-end">
-            <h1>みんなと感想をピンポイントで共有しよう</h1>
-            <p>みんなと感想をピンポイントで共有しよう</p>
-            <p><a class="btn btn-lg btn-primary" href="#" role="button">今すぐ新規登録！</a></p>
+          　<p>ツイートしたいMVがない場合…</p>
+            <h1>③MVを簡単に追加！</h1>
+           
+            <p><a class="btn btn-lg btn-primary" href="#" role="button">MV追加ページへ！</a></p>
           </div>
         </div>
       </div>
@@ -50,71 +49,78 @@
     </a>
   </div>
 
-<h3>アーティスト名を検索</h3>
+<h2>①MVを検索！</h2>
+<h4>歌手名から検索</h4>
  <%= form_tag({controller:"tweets",action:"index"}, method: :get) do %>
    <%= text_field_tag :search %>
    <%= submit_tag '検索する'  %>
 <% end %>
 
-<h3>曲名を検索</h3>
+<h4>曲名から検索</h4>
  <%= form_tag({controller:"tweets",action:"index"}, method: :get) do %>
    <%= text_field_tag :search %>
    <%= submit_tag '検索する'  %>
 <% end %>
-
-<%= link_to "新しくMVを追加", new_tweet_path %>
 
 
 <br>
 <%# page_entries_info @tweets %>
 
 <div class="tweets-container">
-<h3>コメント一覧</h3>
+<h2>②「詳細」ボタンから感想をツイート！</h2>
+<h4>MV一覧</h4>
   <% @tweets.each do |t| %>
 
     <iframe width="560" height="315" src="https://www.youtube.com/embed/<%=t.youtube_url%>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-    <a href="/users/<%= t.user.id %>"><%= t.user.name %></a>　#
-    <div class="tweet">
     
+    <a href="/users/<%= t.user.id %>"><%= t.user.name %></a>　←
+
     <% if user_signed_in? %>
-    <%= link_to "マイページへ", user_path(current_user.id) %>　
+    <%= link_to "投稿者のマイページへ", user_path(current_user.id) %>　
     <% end %>
 
+    <div class="tweet">
+    
+
     <%= image_tag t.image_url, size: "250x200" if t.image? %>
-   　　 <%= t.user.email %>
-   <% if user_signed_in? %>
-   <% if current_user.already_liked?(t) %>
-       <%= link_to tweet_like_path(id: t.id, tweet_id: t.id), method: :delete do %>
-           <p>いいねを取り消す</p><%= t.likes.count %>
-       <% end %>
-   <% else %>
-       <%= link_to tweet_likes_path(id: t.id, tweet_id: t.id), method: :post do %>
-           <p>いいね</p><%= t.likes.count %>
-       <% end %>
-   <% end %>
- <% else %>
-   <p>いいねの数 = </p><%= t.likes.count %>
- <% end %>
-    　　<div class="main-box">
-        <div class="left-container"><%= t.title %></div>
-        <div class="left-container"><%= t.body %></div>
-        <div class="right-container">
-          <%= link_to "詳細", tweet_path(t.id) %>
-         <% if user_signed_in? && current_user.id == t.user_id %>
-          <%= link_to "編集", edit_tweet_path(t.id) %>
-          <%= link_to "削除", tweet_path(t.id), method: :delete %>
-        <% end %> 
+   　　 
+
+    <div class="main-box">
+    <div class="left-container">
+
+    　<%= link_to "詳細", tweet_path(t.id) %>　←コメントする場合はクリック！
+
+    　<% if user_signed_in? && current_user.id == t.user_id %>
+     　<%= link_to "曲名修正", edit_tweet_path(t.id) %>
+     　<%= link_to "MVの削除", tweet_path(t.id), method: :delete %>
+   　　<% end %> 
+
+        <table>
+  　　　　　<tr>
+   　　　　　 <th>歌手名</th>
+    　　　　　<td><%= t.title %></td>
+  　　　　　</tr>
+  　　　　　<tr>
+   　　　　　 <th>曲名</th>
+    　　　　　<td><%= t.body %></td>
+  　　　　　</tr>
+
+　　　　</table>
+          
        </div>
       </div>
-
-      <%= t.created_at %>
-        <p class="time"><%= t.created_at %></p>
+      
     </div>
   <% end %>
 </div>
 
+<h4>つぶやきたいMVがないときは…<h4>
+<h2>③MVを簡単に追加！</h2>
+<%= link_to "新しくMVを追加", new_tweet_path %>
+
 <%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>
+
 
 
 <%# paginate @tweets %>
