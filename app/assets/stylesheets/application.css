@@ -13,7 +13,7 @@
     min-height: 100vh;
   }
   header {
-    background-color: #d18dc6ea;
+    background-color: #f5c9eed0;
     height: 80px;
     font-weight: bold;
     display: flex;
@@ -27,6 +27,7 @@
   header h1 {
     margin-left: 20px;
     color: white;
+    font-family: 'Times New Roman', Times, serif, MS明朝;
   }
   .header-list {
     display: flex;

@@ -49,6 +49,7 @@
     </a>
   </div>
 
+
 <h2>①MVを検索！</h2>
 <h4>歌手名から検索</h4>
  <%= form_tag({controller:"tweets",action:"index"}, method: :get) do %>
@@ -81,7 +82,7 @@
     <% end %>
 
     <div class="tweet">
-    
+    <%= t.user.email %>
 
     <%= image_tag t.image_url, size: "250x200" if t.image? %>
    　　 

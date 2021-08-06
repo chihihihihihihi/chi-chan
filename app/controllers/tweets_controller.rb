@@ -25,7 +25,7 @@ before_action :authenticate_user!
       
         
         tweet.user_id = current_user.id
-
+        
         if tweet.save
           redirect_to :action => "index"
         else
